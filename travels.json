@@ -1,0 +1,26 @@
+{
+  "title": "Dahab November 2023",
+  "countries": ["Egypt"],
+  "months": ["november", "december"],
+  "year": "2023",
+  "seasons": ["autumn", "winter"],
+  "accommodation": [
+    {
+      "type": "apartment",
+      "link": "",
+      "price": "450",
+      "rating": "5",
+      "review": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptas repellendus ipsum, saepe dolor libero deleniti voluptate natus rem, est pariatur excepturi, obcaecati praesentium delectus non! Explicabo porro quaerat possimus fugit."
+    }
+  ],
+  "purpose": ["sport"],
+  "advice": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptas repellendus ipsum",
+  "expenses": [
+    ["bicycle", "40"],
+    ["windsrfing", "420"],
+    ["taxi", "40"]
+  ],
+  "useful_links": [[], [], []],
+  "images": ["", "", ""],
+  "main_img": ""
+}
