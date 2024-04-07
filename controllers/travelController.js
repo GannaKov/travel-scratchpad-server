@@ -25,30 +25,25 @@ const getAllTrips = async (req, res, next) => {
   }
 };
 
-// //  get countries/:code
-// const getCountryByCode = async (req, res, next) => {
-//   try {
-//     const { code } = req.params;
+// //  get travel/:id
+const getTripById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
 
-//     const country = await Country.findOne({
-//       $or: [
-//         { alpha2Code: code.toUpperCase() },
-//         { alpha3Code: code.toUpperCase() },
-//       ],
-//     });
+    const result = await Trip.findById(id);
 
-//     if (!country) {
-//       throw { status: 404, message: "Country not found" };
-//     }
-//     res.status(200).json({
-//       status: "success",
-//       code: 200,
-//       data: country,
-//     });
-//   } catch (err) {
-//     next(err);
-//   }
-// };
+    if (!result) {
+      throw { status: 404, message: "Trip not found" };
+    }
+    res.status(200).json({
+      status: "success",
+      code: 200,
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
 // // POST
 // const postCountry = async (req, res, next) => {
@@ -208,7 +203,7 @@ const getAllTrips = async (req, res, next) => {
 module.exports = {
   getAllTrips,
   // postCountry,
-  // getCountryByCode,
+  getTripById,
   // updateCountry,
   // //deleteCountry,
   // toggleVisitedStatus,

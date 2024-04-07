@@ -6,7 +6,7 @@ travelsRouter = express.Router();
 const {
   getAllTrips,
   // postCountry,
-  // getCountryByCode,
+  getTripById,
   // updateCountry,
   // //deleteCountry,
   // toggleVisitedStatus,
@@ -20,7 +20,7 @@ travelsRouter.get("/", getAllTrips);
 //   body("alpha3Code").notEmpty().trim(),
 //   postCountry
 // );
-// countryRouter.get("/:code", getCountryByCode);
+travelsRouter.get("/:id", getTripById);
 // countryRouter.put("/:code", updateCountry);
 // //countryRouter.delete("/:code", deleteCountry);
 // countryRouter.delete("/:code", toggleVisitedStatus);

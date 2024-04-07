@@ -1,0 +1,43 @@
+{
+  "title": "Ski Monte Rosa  2024",
+  "countries": ["Italy"],
+  "year": "2024",
+  "accommodation": [
+    {
+      "_id": "6612fc7f805a563b46fd569a",
+      "type": "apartment",
+      "link": "https://www.booking.com/hotel/it/villa-della-regina.ru.html?aid=337862&app_hotel_id=383577&checkin=2024-01-15&checkout=2024-01-20&from_sn=android&group_adults=2&group_children=0&label=English_Italy_EN_IT_77770671025-baHbOUZUyieDH4JSAw5pRwSM443142169675%253Apl%253Ata%253Ap1%253Ap2%253Aac%253Aap%253Aneg%253Afi%253Atidsa-824366879162%253Alp1008490%253Ali%253Adem%253Adm-B5tpjm%25401694034477-8gL0cb%25401694036001-IkUKNC%25401694039311-Z6ymwu%25401694066226-BhV11s7%401694192584&no_rooms=1&req_adults=2&req_children=0&room1=A%2CA",
+      "price": 470,
+      "rating": 5,
+      "review": "Very nice, cozy. Breakfast incl "
+    }
+  ],
+  "purpose": ["Sport"],
+  "advice": "Voluptas repellendus ipsum, saepe dolor libero deleniti voluptate natus rem,",
+  "expenses": [
+    {
+      "0": "ski",
+      "1": 120
+    },
+    {
+      "0": "ski-pass",
+      "1": 200
+    }
+  ],
+  "useful_links": [
+    ["ski-area", "https://monterosaski.eu/en"],
+    ["ski", "https://www.snowplaza.de/italien/monte-rosa/"],
+    ["ski bus", "https://monterosaski.eu/en/ski-bus-19400"]
+  ],
+  "images": [
+    "https://fakeimg.pl/800x600/73d97b/909090?text=2",
+    "https://fakeimg.pl/800x600/73d97b/909090?text=3",
+    "https://fakeimg.pl/800x600/73d97b/909090?text=4"
+  ],
+  "main_img": "https://fakeimg.pl/800x600/73d97b/909090?text=1",
+  "travel_rating": 5,
+  "destination": ["Monte Rosa"],
+  "date_start": "2024-01-14T00:00:00.000Z",
+  "date_end": "2024-01-19T00:00:00.000Z",
+  "amount": "850 euro"
+}

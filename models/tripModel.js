@@ -32,6 +32,7 @@ const tripSchema = new Schema(
     useful_links: [[String]],
     images: [String],
     main_img: String,
+    amount: String,
   },
   { collection: "travels" }
 );
