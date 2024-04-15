@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema, model } = mongoose;
+const TripPurpose = require("./tripPurposeModel");
 
 const accommodationSchema = new Schema({
   type: String,
@@ -26,7 +27,12 @@ const tripSchema = new Schema(
     year: String,
     seasons: String,
     accommodation: [accommodationSchema],
-    purpose: [{ type: String, required: true }],
+    purpose: [
+      {
+        _id: { type: Schema.Types.ObjectId, ref: "TripPurpose" },
+        purpose: String,
+      },
+    ],
     advice: String,
     expenses: [expenseSchema],
     useful_links: [[String]],
