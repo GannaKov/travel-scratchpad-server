@@ -8,10 +8,11 @@ const getAllTripsPurpose = async (req, res, next) => {
     if (result.length === 0) {
       throw { status: 404, message: "No trip found" };
     }
+    const purposesArray = result.map((obj) => obj.purpose);
     res.status(200).json({
       status: "success",
       code: 200,
-      data: result,
+      data: purposesArray,
     });
   } catch (err) {
     next(err);
