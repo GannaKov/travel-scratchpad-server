@@ -2,6 +2,8 @@ const express = require("express");
 
 const travelsRouter = require("./routes/travelsRouter.js");
 const tripPurposeRouter = require("./routes/tripPurposeRouter.js");
+
+const accommodationRouter = require("./routes/accommodationRouer.js");
 //require('dotenv').config();
 const cors = require("cors");
 const app = express();
@@ -13,6 +15,7 @@ app.use(express.json());
 
 app.use("/trips", travelsRouter);
 app.use("/trip-purpose", tripPurposeRouter);
+app.use("/accommodation", accommodationRouter);
 app.use((err, req, res, next) => {
   if (err.status === 404) {
     res.status(404).send(err.message);
