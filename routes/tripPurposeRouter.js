@@ -1,7 +1,7 @@
 const express = require("express");
 const { getAllTripsPurpose } = require("../controllers/tripPurposeController");
 
-tripPurposeRouter = express.Router();
+const tripPurposeRouter = express.Router();
 
 tripPurposeRouter.get("/", getAllTripsPurpose);
 

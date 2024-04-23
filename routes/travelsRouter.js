@@ -1,7 +1,7 @@
 const express = require("express");
 // const { query } = require("express-validator");
 // const { body } = require("express-validator");
-travelsRouter = express.Router();
+const travelsRouter = express.Router();
 
 const {
   getAllTrips,
@@ -12,7 +12,7 @@ const {
   // toggleVisitedStatus,
 } = require("../controllers/travelController");
 
-travelsRouter.get("/", getAllTrips);
+ travelsRouter.get("/", getAllTrips);
 // countryRouter.post(
 //   "/",
 //   body("name").notEmpty().trim(),

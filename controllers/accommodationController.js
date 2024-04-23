@@ -3,7 +3,7 @@ const Accommodation = require("../models/accommodationModel");
 const getAllAccommodationTypes = async (req, res, next) => {
   try {
     const result = await Accommodation.find();
-    console.log(result);
+
     if (result.length === 0) {
       throw { status: 404, message: "No Accommodation type found" };
     }
