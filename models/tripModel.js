@@ -12,20 +12,29 @@ const accommodationSchema = new Schema({
 
 const expenseSchema = new Schema({
   item: String,
-  amount: Number,
+  amount: String,
 });
 
 const tripSchema = new Schema(
   {
-    title: { type: String, required: true },
-    travel_rating: { type: Number, required: true },
-    countries: [{ type: String, required: true }],
-    destination: [{ type: String, required: true }],
-    date_start: { type: Date, required: true },
-    date_end: { type: Date, required: true },
-    months: String,
-    year: String,
-    seasons: String,
+    // title: { type: String, required: true },
+    // travel_rating: { type: Number, required: true },
+    // countries: [{ type: String, required: true }],
+    // destination: [{ type: String, required: true }],
+    // date_start: { type: Date, required: true },
+    // date_end: { type: Date, required: true },
+    // months: [{ type: Number, required: true }],
+    // year: [String],
+    // seasons: [{ type: String, required: true }],
+    title: { type: String }, //
+    travel_rating: { type: Number }, //
+    countries: [{ type: String }],
+    destination: [{ type: String }],
+    date_start: { type: Date }, //
+    date_end: { type: Date }, //
+    months: [{ type: Number }],
+    year: [String],
+    seasons: [{ type: String }],
     accommodation: [accommodationSchema],
     purpose: [
       {
@@ -35,10 +44,11 @@ const tripSchema = new Schema(
     ],
     advice: String,
     expenses: [expenseSchema],
-    useful_links: [[String]],
+    useful_links: [{ link: String, topic: String }],
     images: [String],
     main_img: String,
-    amount: String,
+
+    total_amount: String,
   },
   { collection: "travels" }
 );
