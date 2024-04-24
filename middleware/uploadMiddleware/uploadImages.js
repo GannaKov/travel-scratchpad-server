@@ -1,26 +1,10 @@
 const Multer = require("multer");
 
-//import { nanoid } from "nanoid";
-
-const recipeImgParams = {
-  dimensions: {
-    width: 500,
-    height: 500,
-  },
-  maxFileSize: 1000000,
-  acceptableFileTypes: ["jpg", "png", "jpeg"],
-};
 const storage = new Multer.memoryStorage();
 
 const uploads = Multer({
   storage,
-  //   filename: (req, file, cb) => {
-  //     cb(null, file.originalname);
-  //   },
-  //   limits: {
-  //     fileSize: 1048576,
-  //     files: 5,
-  //   },
+
   fileFilter: (req, file, cb) => {
     if (
       file.mimetype == "image/png" ||

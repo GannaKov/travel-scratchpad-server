@@ -1,20 +1,30 @@
 const Trip = require("../models/tripModel");
 const { cloudinaryConfig, uploader } = require("../utils/cloudinaryConfig");
+const { nanoid } = require("nanoid");
 
 const handleUpload = async (file) => {
   const res = await uploader.upload(file, {
-    resource_type: "auto",
-    //folder:'folder_name'
+    resource_type: "image",
+    folder: "travel-scratchpad",
+    public_id: Date.now() + nanoid(6),
+    transformation: { width: 1000, height: 1000, crop: "limit" },
   });
 
   return res;
 };
+
+const getCloudinaryUrl = async (req) => {
+  const b64 = Buffer.from(req.file.buffer).toString("base64");
+  let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+  const cldRes = await handleUpload(dataURI);
+  return cldRes;
+};
+
 const addTrip = async (req, res) => {
   try {
     // console.log("req.body :", req.body);
-    const b64 = Buffer.from(req.file.buffer).toString("base64");
-    let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
-    const cldRes = await handleUpload(dataURI);
+
+    const cldRes = await getCloudinaryUrl(req);
     // console.log("cldRes", cldRes.url);
     const fileUrl = cldRes.url;
     const newTrip = new Trip({
@@ -31,10 +41,10 @@ const addTrip = async (req, res) => {
     // res.json({ imageUrl: result.secure_url });
   } catch (error) {
     console.log(error);
-    //res.status(500).json({ error: 'Error uploading image to Cloudinary' });
-    res.send({
-      message: error.message,
-    });
+    res.status(500).json({ error: "Error uploading image to Cloudinary" });
+    // res.send({
+    //   message: error.message,
+    // });
   }
 };
 
