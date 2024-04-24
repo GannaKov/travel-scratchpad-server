@@ -7,7 +7,12 @@ const handleUpload = async (file) => {
     resource_type: "image",
     folder: "travel-scratchpad",
     public_id: Date.now() + nanoid(6),
-    transformation: { width: 1000, height: 1000, crop: "limit" },
+    transformation: {
+      width: 1000,
+      height: 1000,
+      gravity: "auto",
+      crop: "fill",
+    },
   });
 
   return res;
