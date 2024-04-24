@@ -19,6 +19,9 @@ const handleUpload = async (file) => {
 };
 
 const getCloudinaryUrl = async (req) => {
+  if (!req.file) {
+    return { url: null };
+  }
   const b64 = Buffer.from(req.file.buffer).toString("base64");
   let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
   const cldRes = await handleUpload(dataURI);
@@ -27,29 +30,36 @@ const getCloudinaryUrl = async (req) => {
 
 const addTrip = async (req, res) => {
   try {
-    // console.log("req.body :", req.body);
-
+    console.log("file", req.file);
     const cldRes = await getCloudinaryUrl(req);
-    // console.log("cldRes", cldRes.url);
+
     const fileUrl = cldRes.url;
-    const newTrip = new Trip({
+    const data = JSON.parse(req.body.data);
+    //const { data } = req.body;
+
+    const newTripData = new Trip({
+      ...data,
+      travel_rating: Number(data.travel_rating),
+      title: data.title.trim(),
+      date_start: new Date(data.date_start),
+      date_end: new Date(data.date_end),
       main_img: fileUrl,
     });
-    const result = await newTrip.save();
+    if (!fileUrl) {
+      delete newTripData.main_img;
+    }
 
+    const newTrip = new Trip(newTripData);
+
+    const result = await newTrip.save();
     //res.json(cldRes);
     if (!result) {
       throw { status: 500, message: "Failed to create image" };
     }
     res.status(201).json({ status: "Created ", code: 201, data: result });
-    //// Send the Cloudinary URL in the response
-    // res.json({ imageUrl: result.secure_url });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Error uploading image to Cloudinary" });
-    // res.send({
-    //   message: error.message,
-    // });
   }
 };
 
