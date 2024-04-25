@@ -45,6 +45,54 @@ const getTripById = async (req, res, next) => {
   }
 };
 
+//   put change trip/:code
+// const updateCountry = async (req, res, next) => {
+//   try {
+//     const { code } = req.params;
+//     const countryName = req.body?.name;
+//     const countryAlpha2Code = req.body?.alpha2Code?.toUpperCase();
+//     const countryAlpha3Code = req.body.alpha3Code?.toUpperCase();
+//     const countryVisited = req.body?.visited;
+
+//     const country = await Country.findOne({
+//       $or: [
+//         { alpha2Code: code.toUpperCase() },
+//         { alpha3Code: code.toUpperCase() },
+//       ],
+//     });
+
+//     if (!country) {
+//       throw { status: 404, message: "Country not found" };
+//     }
+//     const newCountryName = countryName || country.name;
+//     const newCountryAlpha2Code = countryAlpha2Code || country.alpha2Code;
+//     const newCountryAlpha3Code = countryAlpha3Code || country.alpha3Code;
+//     const newCountryVisited = countryVisited || country.visited;
+
+//     const updatedCountry = await Country.findByIdAndUpdate(
+//       country.id,
+//       {
+//         visited: newCountryVisited,
+//         name: newCountryName,
+//         alpha2Code: newCountryAlpha2Code.toUpperCase(),
+//         alpha3Code: newCountryAlpha3Code.toUpperCase(),
+//       },
+//       { new: true }
+//     );
+
+//     if (!updatedCountry) {
+//       throw res.status(500).send("Error updating country");
+//     }
+//     res.status(200).json({
+//       status: "updated ",
+//       code: 200,
+//       data: updatedCountry,
+//     });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
+
 // // POST
 // const postCountry = async (req, res, next) => {
 //   try {
@@ -89,54 +137,6 @@ const getTripById = async (req, res, next) => {
 //         errors: validResult.array(),
 //       };
 //     }
-//   } catch (err) {
-//     next(err);
-//   }
-// };
-
-// //   put change countries/:code
-// const updateCountry = async (req, res, next) => {
-//   try {
-//     const { code } = req.params;
-//     const countryName = req.body?.name;
-//     const countryAlpha2Code = req.body?.alpha2Code?.toUpperCase();
-//     const countryAlpha3Code = req.body.alpha3Code?.toUpperCase();
-//     const countryVisited = req.body?.visited;
-
-//     const country = await Country.findOne({
-//       $or: [
-//         { alpha2Code: code.toUpperCase() },
-//         { alpha3Code: code.toUpperCase() },
-//       ],
-//     });
-
-//     if (!country) {
-//       throw { status: 404, message: "Country not found" };
-//     }
-//     const newCountryName = countryName || country.name;
-//     const newCountryAlpha2Code = countryAlpha2Code || country.alpha2Code;
-//     const newCountryAlpha3Code = countryAlpha3Code || country.alpha3Code;
-//     const newCountryVisited = countryVisited || country.visited;
-
-//     const updatedCountry = await Country.findByIdAndUpdate(
-//       country.id,
-//       {
-//         visited: newCountryVisited,
-//         name: newCountryName,
-//         alpha2Code: newCountryAlpha2Code.toUpperCase(),
-//         alpha3Code: newCountryAlpha3Code.toUpperCase(),
-//       },
-//       { new: true }
-//     );
-
-//     if (!updatedCountry) {
-//       throw res.status(500).send("Error updating country");
-//     }
-//     res.status(200).json({
-//       status: "updated ",
-//       code: 200,
-//       data: updatedCountry,
-//     });
 //   } catch (err) {
 //     next(err);
 //   }
