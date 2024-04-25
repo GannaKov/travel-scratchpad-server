@@ -59,7 +59,7 @@ const tripSchema = new Schema(
   {
     title: { type: String, required: true },
     travel_rating: { type: Number, required: true },
-    countries: [{ type: String }],
+    countries: [{ type: String, required: true }],
     destination: [{ type: String }],
     date_start: { type: Date, required: true },
     date_end: { type: Date, required: true },
@@ -75,7 +75,7 @@ const tripSchema = new Schema(
         review: { type: String },
       },
     ],
-    purpose: [{ type: String }],
+    purpose: [{ type: String, required: true }],
     advice: { type: String },
     expenses: [
       {
@@ -89,8 +89,8 @@ const tripSchema = new Schema(
         topic: { type: String },
       },
     ],
-    images: [{ type: String }], // Если это ссылки на изображения
-    main_img: { type: String }, // Главное изображение
+    images: [{ type: String }],
+    main_img: { type: String },
     total_amount: { type: String },
   },
   { collection: "travels" }
