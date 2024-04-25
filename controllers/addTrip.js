@@ -1,6 +1,9 @@
 const Trip = require("../models/tripModel");
 const { cloudinaryConfig, uploader } = require("../utils/cloudinaryConfig");
 const { nanoid } = require("nanoid");
+const dayjs = require("dayjs");
+var customParseFormat = require("dayjs/plugin/customParseFormat");
+dayjs.extend(customParseFormat);
 
 const handleUpload = async (file) => {
   const res = await uploader.upload(file, {
@@ -30,19 +33,21 @@ const getCloudinaryUrl = async (req) => {
 
 const addTrip = async (req, res) => {
   try {
-    console.log("file", req.file);
+    //console.log("file", req.file);
     const cldRes = await getCloudinaryUrl(req);
 
     const fileUrl = cldRes.url;
     const data = JSON.parse(req.body.data);
     //const { data } = req.body;
+    const startDate = dayjs(data.date_start, "DD.MM.YYYY").toDate();
+    const endDate = dayjs(data.date_end, "DD.MM.YYYY").toDate();
 
     const newTripData = new Trip({
       ...data,
       travel_rating: Number(data.travel_rating),
       title: data.title.trim(),
-      date_start: new Date(data.date_start),
-      date_end: new Date(data.date_end),
+      date_start: startDate,
+      date_end: endDate,
       main_img: fileUrl,
     });
     if (!fileUrl) {
