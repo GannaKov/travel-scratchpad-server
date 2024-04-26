@@ -7,22 +7,16 @@ const {
   getAllTrips,
   // postCountry,
   getTripById,
+  deleteTripById,
   // updateCountry,
   // //deleteCountry,
   // toggleVisitedStatus,
 } = require("../controllers/travelController");
 
- travelsRouter.get("/", getAllTrips);
-// countryRouter.post(
-//   "/",
-//   body("name").notEmpty().trim(),
-//   body("alpha2Code").notEmpty().trim(),
-//   body("alpha3Code").notEmpty().trim(),
-//   postCountry
-// );
+travelsRouter.get("/", getAllTrips);
+
 travelsRouter.get("/:id", getTripById);
-// countryRouter.put("/:code", updateCountry);
-// //countryRouter.delete("/:code", deleteCountry);
-// countryRouter.delete("/:code", toggleVisitedStatus);
+
+travelsRouter.delete("/:id", deleteTripById);
 
 module.exports = travelsRouter;

@@ -45,6 +45,31 @@ const getTripById = async (req, res, next) => {
   }
 };
 
+//delete one trip
+const deleteTripById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const trip = await Trip.findById(id);
+
+    if (!trip) {
+      throw { status: 404, message: "Trip not found" };
+    }
+    const result = await Trip.findByIdAndDelete(id);
+    console.log("del", result);
+    if (!result) {
+      throw res.status(500).send("Error deleting result");
+    }
+    res.status(200).json({
+      status: "success",
+      code: 200,
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 //   put change trip/:code
 // const updateCountry = async (req, res, next) => {
 //   try {
@@ -204,6 +229,7 @@ module.exports = {
   getAllTrips,
   // postCountry,
   getTripById,
+  deleteTripById,
   // updateCountry,
   // //deleteCountry,
   // toggleVisitedStatus,
