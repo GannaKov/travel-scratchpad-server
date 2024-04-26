@@ -72,42 +72,46 @@ const addTrip = async (req, res) => {
 const updateTrip = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const {} = req.body;
-    //     const countryName = req.body?.name;
-    //     const countryAlpha2Code = req.body?.alpha2Code?.toUpperCase();
-    //     const countryAlpha3Code = req.body.alpha3Code?.toUpperCase();
-    //     const countryVisited = req.body?.visited;
+
     const trip = await Trip.findById(id);
     if (!trip) {
+      console.log("no trip");
       throw { status: 404, message: "Trip not found" };
     }
-    //     if (!country) {
-    //       throw { status: 404, message: "Country not found" };
-    //     }
-    //     const newCountryName = countryName || country.name;
-    //     const newCountryAlpha2Code = countryAlpha2Code || country.alpha2Code;
-    //     const newCountryAlpha3Code = countryAlpha3Code || country.alpha3Code;
-    //     const newCountryVisited = countryVisited || country.visited;
-    //     const updatedCountry = await Country.findByIdAndUpdate(
-    //       country.id,
-    //       {
-    //         visited: newCountryVisited,
-    //         name: newCountryName,
-    //         alpha2Code: newCountryAlpha2Code.toUpperCase(),
-    //         alpha3Code: newCountryAlpha3Code.toUpperCase(),
-    //       },
-    //       { new: true }
-    //     );
-    //     if (!updatedCountry) {
-    //       throw res.status(500).send("Error updating country");
-    //     }
-    //     res.status(200).json({
-    //       status: "updated ",
-    //       code: 200,
-    //       data: updatedCountry,
-    //     });
+    const cldRes = await getCloudinaryUrl(req);
+
+    const fileUrl = cldRes.url;
+    const data = JSON.parse(req.body.data);
+    //const { data } = req.body;
+    const startDate = dayjs(data.date_start, "DD.MM.YYYY").toDate();
+    const endDate = dayjs(data.date_end, "DD.MM.YYYY").toDate();
+    const tripData = {
+      ...data,
+      travel_rating: Number(data.travel_rating),
+      title: data.title.trim(),
+      date_start: startDate,
+      date_end: endDate,
+    };
+    if (fileUrl) {
+      tripData.main_img = fileUrl;
+    } else {
+      delete tripData.main_img;
+    }
+
+    const updatedTrip = await Trip.findByIdAndUpdate(id, tripData, {
+      new: true,
+    });
+
+    if (!updatedTrip) {
+      throw res.status(500).send("Error updating country");
+    }
+    res.status(200).json({
+      status: "updated ",
+      code: 200,
+      data: tripData,
+    });
   } catch (err) {
-    //     next(err);
+    next(err);
   }
 };
 module.exports = { addTrip, updateTrip };
