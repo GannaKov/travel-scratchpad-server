@@ -1,5 +1,5 @@
 const Trip = require("../models/tripModel");
-// const { matchedData, validationResult } = require("express-validator");
+const { cloudinaryConfig, uploader } = require("../utils/cloudinaryConfig");
 
 // GET all trips
 const getAllTrips = async (req, res, next) => {
@@ -55,8 +55,17 @@ const deleteTripById = async (req, res, next) => {
     if (!trip) {
       throw { status: 404, message: "Trip not found" };
     }
+    // delete from  Cloudinary
+    if (trip.main_img) {
+      const publicId = trip.main_img.split("/").pop().split(".")[0];
+      console.log("trip.main_img", trip.main_img, "publicId", publicId);
+
+      await uploader
+        .destroy(`travel-scratchpad/${publicId}`)
+        .then((res) => console.log("photo", res));
+    }
     const result = await Trip.findByIdAndDelete(id);
-    console.log("del", result);
+    //console.log("del", result);
     if (!result) {
       throw res.status(500).send("Error deleting result");
     }
