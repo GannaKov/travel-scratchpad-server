@@ -7,7 +7,8 @@ const {
 } = require("../middleware/uploadMiddleware/uploadImages");
 const addTripRouter = express.Router();
 
-addTripRouter.post("/", multerUploads, addTrip);
+//addTripRouter.post("/", multerUploads, addTrip);
+addTripRouter.post("/", multerMultyUploads, addTrip);
 addTripRouter.put("/:id", multerUploads, updateTrip);
 
 module.exports = addTripRouter;
