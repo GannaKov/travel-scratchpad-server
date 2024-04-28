@@ -39,17 +39,9 @@ const getCloudinaryUrl = async (img) => {
   let dataURI = "data:" + img.mimetype + ";base64," + b64;
   const cldRes = await handleUpload(dataURI);
   return cldRes;
-  // for (const file in req.files) {
-  //   const b64 = Buffer.from(file.buffer).toString("base64");
-  //   let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
-  //   const cldRes = await handleUpload(dataURI);
-  //   return cldRes;
-  // }
 };
 const addTrip = async (req, res) => {
   try {
-    //console.log("req", req);
-
     //const cldRes = await getCloudinaryUrl(req);
     //const fileUrl = cldRes.url;
     // -----multy promise --------
@@ -59,13 +51,7 @@ const addTrip = async (req, res) => {
         return cldRes.url;
       })
     );
-    // (constuploadedImages = async () => {
-    //   for (const image in images) {
-    //     const result = await getCloudinaryUrl(images[image]);
-    //     console.log(result);
-    //   }
-    // });
-    console.log("UplImg", uploadedImages);
+
     const data = JSON.parse(req.body.data);
     //const { data } = req.body;
     const startDate = dayjs(data.date_start, "DD.MM.YYYY").toDate();
@@ -114,9 +100,16 @@ const updateTrip = async (req, res, next) => {
       console.log("no trip");
       throw { status: 404, message: "Trip not found" };
     }
-    const cldRes = await getCloudinaryUrl(req);
+    // const cldRes = await getCloudinaryUrl(req);
 
-    const fileUrl = cldRes.url;
+    // const fileUrl = cldRes.url;
+
+    const uploadedImages = await Promise.all(
+      req.files.map(async (image) => {
+        const cldRes = await getCloudinaryUrl(image);
+        return cldRes.url;
+      })
+    );
     const data = JSON.parse(req.body.data);
     //const { data } = req.body;
     const startDate = dayjs(data.date_start, "DD.MM.YYYY").toDate();
@@ -127,11 +120,20 @@ const updateTrip = async (req, res, next) => {
       title: data.title.trim(),
       date_start: startDate,
       date_end: endDate,
+      main_img: uploadedImages[0],
+      images: uploadedImages,
     };
-    if (fileUrl) {
-      tripData.main_img = fileUrl;
-    } else {
-      delete tripData.main_img;
+
+    //for one
+    // if (fileUrl) {
+    //   tripData.main_img = fileUrl;
+    // } else {
+    //   delete tripData.main_img;
+    // }
+    //for many
+    if (!uploadedImages || uploadedImages.length === 0) {
+      // Если массив пустой или его длина равна 0, удаляем поле images из объекта newTripData
+      delete tripData.images;
     }
 
     const updatedTrip = await Trip.findByIdAndUpdate(id, tripData, {
