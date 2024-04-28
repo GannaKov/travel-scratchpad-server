@@ -19,6 +19,6 @@ const uploads = Multer({
   },
 });
 const multerUploads = uploads.single("main_file");
-const multerMultyUploads = uploads.array("image_files", 3);
+const multerMultyUploads = uploads.array("image_files");
 
 module.exports = { multerUploads, multerMultyUploads };
