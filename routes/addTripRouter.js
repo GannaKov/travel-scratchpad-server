@@ -3,6 +3,7 @@ const express = require("express");
 const { addTrip, updateTrip } = require("../controllers/addTrip");
 const {
   multerUploads,
+  multerMultyUploads,
 } = require("../middleware/uploadMiddleware/uploadImages");
 const addTripRouter = express.Router();
 
