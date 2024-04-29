@@ -40,6 +40,7 @@ const getCloudinaryUrl = async (img) => {
   const cldRes = await handleUpload(dataURI);
   return cldRes;
 };
+// post trip
 const addTrip = async (req, res) => {
   try {
     //const cldRes = await getCloudinaryUrl(req);
@@ -51,12 +52,14 @@ const addTrip = async (req, res) => {
         return cldRes.url;
       })
     );
-
+    // prep data for backend
     const data = JSON.parse(req.body.data);
-    //const { data } = req.body;
+
     const startDate = dayjs(data.date_start, "DD.MM.YYYY").toDate();
     const endDate = dayjs(data.date_end, "DD.MM.YYYY").toDate();
 
+    const mainImg = uploadedImages.length > 0 ? uploadedImages[0] : "";
+    //--------------
     const newTripData = new Trip({
       ...data,
       travel_rating: Number(data.travel_rating),
@@ -64,7 +67,7 @@ const addTrip = async (req, res) => {
       date_start: startDate,
       date_end: endDate,
       // main_img: fileUrl,
-      main_img: uploadedImages[0],
+      main_img: mainImg,
       images: uploadedImages,
     });
     // for multy if I need
@@ -92,35 +95,59 @@ const addTrip = async (req, res) => {
 
 //   put change trip/:шв
 const updateTrip = async (req, res, next) => {
+  console.log("req.files in put", req.files);
   try {
     const { id } = req.params;
 
     const trip = await Trip.findById(id);
     if (!trip) {
-      console.log("no trip");
       throw { status: 404, message: "Trip not found" };
     }
     // const cldRes = await getCloudinaryUrl(req);
 
     // const fileUrl = cldRes.url;
 
+    // delete from  Cloudinary prev images
+
+    // if (trip.main_img) { now i do not it
+    //   const publicId = trip.main_img.split("/").pop().split(".")[0];
+
+    //   await uploader
+    //     .destroy(`travel-scratchpad/${publicId}`)
+    //     .then((res) => console.log("photo", res));
+    // }
+
+    if (trip.images.length > 0) {
+      trip.images.forEach(async (img) => {
+        const publicId = img.split("/").pop().split(".")[0];
+
+        await uploader.destroy(`travel-scratchpad/${publicId}`);
+        // .then((res) => console.log("photo", res));
+      });
+    }
+    //-------- end delete from Cloudinary prev images
     const uploadedImages = await Promise.all(
       req.files.map(async (image) => {
         const cldRes = await getCloudinaryUrl(image);
         return cldRes.url;
       })
     );
+
+    // prep data for backend
     const data = JSON.parse(req.body.data);
-    //const { data } = req.body;
+
     const startDate = dayjs(data.date_start, "DD.MM.YYYY").toDate();
     const endDate = dayjs(data.date_end, "DD.MM.YYYY").toDate();
+
+    const mainImg = uploadedImages.length > 0 ? uploadedImages[0] : "";
+    //--------------
     const tripData = {
       ...data,
       travel_rating: Number(data.travel_rating),
       title: data.title.trim(),
       date_start: startDate,
       date_end: endDate,
-      main_img: uploadedImages[0],
+      main_img: mainImg,
       images: uploadedImages,
     };
 
@@ -130,11 +157,11 @@ const updateTrip = async (req, res, next) => {
     // } else {
     //   delete tripData.main_img;
     // }
-    //for many
-    if (!uploadedImages || uploadedImages.length === 0) {
-      // Если массив пустой или его длина равна 0, удаляем поле images из объекта newTripData
-      delete tripData.images;
-    }
+    //for many ????
+    // if (!uploadedImages || uploadedImages.length === 0) {
+    //   // Если массив пустой или его длина равна 0, удаляем поле images из объекта newTripData
+    //   delete tripData.images;
+    // }
 
     const updatedTrip = await Trip.findByIdAndUpdate(id, tripData, {
       new: true,

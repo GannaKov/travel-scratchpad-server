@@ -68,11 +68,11 @@ const deleteTripById = async (req, res, next) => {
       trip.images.forEach(async (img) => {
         const publicId = img.split("/").pop().split(".")[0];
 
-        await uploader
-          .destroy(`travel-scratchpad/${publicId}`)
-          .then((res) => console.log("photo", res));
+        await uploader.destroy(`travel-scratchpad/${publicId}`);
+        // .then((res) => console.log("photo", res));
       });
     }
+    //-------- end delete from  Cloudinary
     const result = await Trip.findByIdAndDelete(id);
     //console.log("del", result);
     if (!result) {

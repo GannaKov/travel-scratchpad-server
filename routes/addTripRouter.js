@@ -9,6 +9,7 @@ const addTripRouter = express.Router();
 
 //addTripRouter.post("/", multerUploads, addTrip);
 addTripRouter.post("/", multerMultyUploads, addTrip);
-addTripRouter.put("/:id", multerUploads, updateTrip);
+//addTripRouter.put("/:id", multerUploads, updateTrip);
+addTripRouter.put("/:id", multerMultyUploads, updateTrip);
 
 module.exports = addTripRouter;
