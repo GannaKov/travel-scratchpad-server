@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { addTrip, updateTrip } = require("../controllers/addTrip");
+const { addTrip, updateTrip, updateTrip2 } = require("../controllers/addTrip");
 const {
   multerUploads,
   multerMultyUploads,

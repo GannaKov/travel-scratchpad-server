@@ -95,7 +95,10 @@ const addTrip = async (req, res) => {
 
 //   put change trip/:шв
 const updateTrip = async (req, res, next) => {
-  console.log("req.files in put", req.files);
+  // console.log("req.files in put", req.files);
+  const { isMainImgChanged, image_files, old_images } = req.body;
+  console.log("old_images", old_images, typeof old_images);
+  console.log("isMainImgChanged", isMainImgChanged, typeof isMainImgChanged);
   try {
     const { id } = req.params;
 
@@ -103,6 +106,7 @@ const updateTrip = async (req, res, next) => {
     if (!trip) {
       throw { status: 404, message: "Trip not found" };
     }
+    // old one
     // const cldRes = await getCloudinaryUrl(req);
 
     // const fileUrl = cldRes.url;
@@ -116,22 +120,51 @@ const updateTrip = async (req, res, next) => {
     //     .destroy(`travel-scratchpad/${publicId}`)
     //     .then((res) => console.log("photo", res));
     // }
+    // ---- end old one
+
+    // delete from Cloudinary prev images
+    // console.log("trip.images", trip.images);
+    // if (trip.images.length > 0) {
+    //   trip.images.forEach(async (img) => {
+    //     const publicId = img.split("/").pop().split(".")[0];
+    //     console.log("in delete", publicId);
+    //     await uploader.destroy(`travel-scratchpad/${publicId}`);
+    //   });
+    // }
+    let oldImgArr = [];
+    if (old_images) {
+      oldImgArr = Array.isArray(old_images) ? old_images : [old_images];
+    } else {
+      oldImgArr = [];
+    }
+    //const oldImgArr = Array.isArray(old_images) ? old_images : [old_images];
 
     if (trip.images.length > 0) {
       trip.images.forEach(async (img) => {
         const publicId = img.split("/").pop().split(".")[0];
+        if (oldImgArr.length > 0) {
+          const isInOldImages = oldImgArr.some((oldImg) => {
+            const oldPublicId = oldImg.split("/").pop().split(".")[0];
+            return oldPublicId === publicId;
+          });
 
-        await uploader.destroy(`travel-scratchpad/${publicId}`);
-        // .then((res) => console.log("photo", res));
+          if (!isInOldImages) {
+            await uploader.destroy(`travel-scratchpad/${publicId}`);
+          }
+        } else {
+          await uploader.destroy(`travel-scratchpad/${publicId}`);
+        }
       });
     }
     //-------- end delete from Cloudinary prev images
+    // to Cloudinary
     const uploadedImages = await Promise.all(
       req.files.map(async (image) => {
         const cldRes = await getCloudinaryUrl(image);
         return cldRes.url;
       })
     );
+    // ---- end to Cloudinary
 
     // prep data for backend
     const data = JSON.parse(req.body.data);
@@ -139,7 +172,26 @@ const updateTrip = async (req, res, next) => {
     const startDate = dayjs(data.date_start, "DD.MM.YYYY").toDate();
     const endDate = dayjs(data.date_end, "DD.MM.YYYY").toDate();
 
-    const mainImg = uploadedImages.length > 0 ? uploadedImages[0] : "";
+    //const mainImg = uploadedImages.length > 0 ? uploadedImages[0] : "";
+    // const mainImg =
+    //   isMainImgChanged === "true"
+    //     ? uploadedImages[0]
+    //     : old_images
+    //     ? old_images[0]
+    //     : "";
+
+    let allImages = [];
+
+    if (isMainImgChanged === "true") {
+      allImages = [...uploadedImages, ...oldImgArr];
+    } else {
+      allImages = [...oldImgArr, ...uploadedImages];
+    }
+    let mainImg = allImages.length > 0 ? allImages[0] : "";
+    console.log("uploadedImages ", uploadedImages);
+    console.log("allImages", allImages);
+    console.log("oldImgArr", oldImgArr);
+    console.log("mainImg", mainImg);
     //--------------
     const tripData = {
       ...data,
@@ -148,9 +200,9 @@ const updateTrip = async (req, res, next) => {
       date_start: startDate,
       date_end: endDate,
       main_img: mainImg,
-      images: uploadedImages,
+      images: allImages,
     };
-
+    //´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´comment
     //for one
     // if (fileUrl) {
     //   tripData.main_img = fileUrl;
@@ -162,6 +214,7 @@ const updateTrip = async (req, res, next) => {
     //   // Если массив пустой или его длина равна 0, удаляем поле images из объекта newTripData
     //   delete tripData.images;
     // }
+    //´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´
 
     const updatedTrip = await Trip.findByIdAndUpdate(id, tripData, {
       new: true,
@@ -179,4 +232,11 @@ const updateTrip = async (req, res, next) => {
     next(err);
   }
 };
-module.exports = { addTrip, updateTrip };
+
+const updateTrip2 = async (req, res, next) => {
+  console.log("req.files in put", req.files);
+  console.log("req.body in put", req.body);
+  console.log("old in put", req.body.old_images);
+  console.log("old in put", req.body.old_images);
+};
+module.exports = { addTrip, updateTrip, updateTrip2 };
