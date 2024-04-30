@@ -21,8 +21,8 @@ app.use(cors());
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(cookieParser());
-//const path = require('path');
+app.use(cookieParser()); // what is it
+
 app.use("/api/users", authRouter);
 app.use("/trips", travelsRouter);
 app.use("/trip-purpose", tripPurposeRouter);

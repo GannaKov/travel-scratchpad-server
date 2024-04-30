@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const jwtTokens = require("../utils/jwtHelpers");
 const User = require("../models/userModel");
+const authentication = require("../middleware/authentication");
 
 const authRouter = express.Router();
 //get all users
@@ -30,7 +31,12 @@ authRouter.post("/register", async (req, res, next) => {
     const { username, email, password } = req.body;
     const user = await User.findOne({ email });
     if (user) {
-      throw { status: 409, message: "Email in use" };
+      return res.status(409).json({
+        status: "error",
+        code: 409,
+        message: "Email is already in use",
+        data: "Conflict",
+      });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -53,12 +59,23 @@ authRouter.post("/login", async (req, res, next) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-      throw { status: 409, message: "Email is incorrect" };
+      // throw { status: 409, message: "Email is incorrect" };
+      return res.status(400).json({
+        status: "error",
+        code: 400,
+        message: "Incorrect login ",
+        data: "Bad request",
+      });
     }
 
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
-      throw { status: 401, message: "Password is incorrect" };
+      return res.status(400).json({
+        status: "error",
+        code: 400,
+        message: "Incorrect password",
+        data: "Bad request",
+      });
     }
     //----
     //??
@@ -76,6 +93,32 @@ authRouter.post("/login", async (req, res, next) => {
     next(error);
   }
 });
+//----------logout
+authRouter.post("/logout", authentication, async (req, res, next) => {
+  const userId = req.user.id;
+  //   console.log("req.user", req.user);
+  //   console.log("userId:", userId);
+  try {
+    //const result = await User.findByIdAndUpdate(userId, { token: "" });
+    const result = await User.findOneAndUpdate(
+      { _id: userId },
+      { $set: { token: "" } }
+    );
+
+    // console.log("result:", result);
+    if (!result) {
+      console.log("User not found or token not removed");
+      return res
+        .status(404)
+        .json({ error: "User not found or token not removed" });
+    }
+    // res.status(204).json({ message: "Logout successful" });
+    res.status(200).json({ message: "Logout successful" });
+  } catch (error) {
+    next(error);
+  }
+});
+
 //-------------------------------------
 authRouter.get("/refresh_token", (req, res) => {
   try {
