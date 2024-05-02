@@ -6,6 +6,23 @@ const User = require("../models/userModel");
 const authentication = require("../middleware/authentication");
 
 const authRouter = express.Router();
+//get user
+authRouter.get("/:id", async (req, res, next) => {
+  try {
+    const result = await User.find();
+
+    if (result.length === 0) {
+      throw { status: 404, message: "No user found" };
+    }
+    res.status(200).json({
+      status: "success",
+      code: 200,
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
 //get all users
 authRouter.get("/", async (req, res, next) => {
   try {
