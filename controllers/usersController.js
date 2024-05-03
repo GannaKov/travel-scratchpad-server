@@ -22,7 +22,7 @@ const getUserById = async (req, res, next) => {
 
   try {
     const result = await User.findById(id);
-    console.log("user", result);
+    // console.log("user", result);
     if (!result) {
       throw { status: 404, message: "No user found" };
     }

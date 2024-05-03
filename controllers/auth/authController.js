@@ -2,6 +2,7 @@ const createError = require("http-errors");
 const User = require("../../models/userModel");
 const { jwtTokens } = require("../../utils/jwtHelpers");
 const bcrypt = require("bcrypt");
+const ms = require("ms");
 
 //signUp
 const signUp = async (req, res, next) => {
@@ -78,14 +79,18 @@ const login = async (req, res, next) => {
     let tokens = jwtTokens(user);
     res.cookie("refresh_token", tokens.refreshToken, {
       httpOnly: true,
+      //maxAge: ms(process.env.ACCESS_TOKEN_LIFE),
     });
+    const expiresAt = ms(process.env.ACCESS_TOKEN_LIFE);
 
+    console.log(expiresAt);
     res.json({
       status: "success",
       code: 200,
       data: {
         tokens,
         user: { email: user.email, id: user._id },
+        expiresAt,
       },
     });
     // req.userId = user.id;
