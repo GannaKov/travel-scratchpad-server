@@ -105,22 +105,24 @@ const login = async (req, res, next) => {
 const refreshToken = (req, res) => {
   try {
     const refreshToken = req.cookies.refresh_token;
-    // console.log(refreshToken);
+
+    console.log(refreshToken);
     if (refreshToken === null) {
       return res.status(401).json({ error: "Null refresh token" });
     }
-    console.log(refreshToken);
+
     jwt.verify(
       refreshToken,
       process.env.REFRESH_TOKEN_SECRET,
       (error, user) => {
-        console.log("hier", error, user);
         if (error) return res.status(403).json({ error: error.message });
         const expiresAt = ms(process.env.ACCESS_TOKEN_LIFE);
         let tokens = jwtTokens(user, expiresAt);
-        res.cookie("refresh_token", tokens.refreshToken, {
-          httpOnly: true,
-        });
+        // res.cookie("refresh_token", tokens.refreshToken, {
+        //   httpOnly: true,
+        // });
+        //we need only ACCESS_TOKEN!!!
+        console.log("tockens", tokens);
         res.json(tokens);
       }
     );

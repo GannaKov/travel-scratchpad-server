@@ -11,14 +11,13 @@ require("dotenv").config();
 const cors = require("cors");
 const app = express();
 
-//Options????
-// const corsOptions = {
-//   credentials: true,
-//   origin: process.env.URL || "*",
-// };
-
-// app.use(cors(corsOptions));
-app.use(cors());
+const corsOptions = {
+  credentials: true,
+  //origin: process.env.URL || "*",
+  origin: "http://localhost:5173",
+};
+app.use(cors(corsOptions));
+//app.use(cors());
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
