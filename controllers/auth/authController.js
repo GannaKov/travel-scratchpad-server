@@ -105,7 +105,9 @@ const login = async (req, res, next) => {
 const refreshToken = (req, res) => {
   try {
     const refreshToken = req.cookies.refresh_token;
-
+    if (!refreshToken) {
+      return res.status(204);
+    }
     console.log(refreshToken);
     if (refreshToken === null) {
       return res.status(401).json({ error: "Null refresh token" });
