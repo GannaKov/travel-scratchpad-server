@@ -15,4 +15,4 @@ const jwtTokens = ({ id, username, email }) => {
   };
 };
 
-module.exports = jwtTokens;
+module.exports = { jwtTokens };

@@ -2,6 +2,7 @@ const express = require("express");
 //import cookieParser from 'cookie-parser';
 const cookieParser = require("cookie-parser");
 const authRouter = require("./routes/authRoutes.js");
+const userRouter = require("./routes/userRouter.js");
 const travelsRouter = require("./routes/travelsRouter.js");
 const tripPurposeRouter = require("./routes/tripPurposeRouter.js");
 const addTripRouter = require("./routes/addTripRouter.js");
@@ -23,11 +24,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser()); // what is it
 
-app.use("/api/users", authRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/users", userRouter);
+//------
 app.use("/trips", travelsRouter);
 app.use("/trip-purpose", tripPurposeRouter);
 app.use("/accommodation", accommodationRouter);
 app.use("/add-trip", addTripRouter);
+
 app.use((err, req, res, next) => {
   if (err.status === 404) {
     res.status(404).send(err.message);
