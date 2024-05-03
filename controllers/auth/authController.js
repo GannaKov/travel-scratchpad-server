@@ -3,6 +3,8 @@ const User = require("../../models/userModel");
 const { jwtTokens } = require("../../utils/jwtHelpers");
 const bcrypt = require("bcrypt");
 const ms = require("ms");
+const userRouter = require("../../routes/userRouter");
+const jwt = require("jsonwebtoken");
 
 //signUp
 const signUp = async (req, res, next) => {
@@ -70,20 +72,19 @@ const login = async (req, res, next) => {
       //   });
     }
     //----
-    //??
+    const expiresAt = ms(process.env.ACCESS_TOKEN_LIFE);
     // const payload = {
-    //   id: user._id,
+    //   ...user,
+    //   expiresAt,
     // };
 
     //---
-    let tokens = jwtTokens(user);
+    let tokens = jwtTokens(user, expiresAt);
     res.cookie("refresh_token", tokens.refreshToken, {
       httpOnly: true,
       //maxAge: ms(process.env.ACCESS_TOKEN_LIFE),
     });
-    const expiresAt = ms(process.env.ACCESS_TOKEN_LIFE);
 
-    console.log(expiresAt);
     res.json({
       status: "success",
       code: 200,
@@ -105,14 +106,18 @@ const refreshToken = (req, res) => {
   try {
     const refreshToken = req.cookies.refresh_token;
     // console.log(refreshToken);
-    if (refreshToken === null)
+    if (refreshToken === null) {
       return res.status(401).json({ error: "Null refresh token" });
+    }
+    console.log(refreshToken);
     jwt.verify(
       refreshToken,
       process.env.REFRESH_TOKEN_SECRET,
       (error, user) => {
+        console.log("hier", error, user);
         if (error) return res.status(403).json({ error: error.message });
-        let tokens = jwtTokens(user);
+        const expiresAt = ms(process.env.ACCESS_TOKEN_LIFE);
+        let tokens = jwtTokens(user, expiresAt);
         res.cookie("refresh_token", tokens.refreshToken, {
           httpOnly: true,
         });
