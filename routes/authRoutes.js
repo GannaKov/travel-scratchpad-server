@@ -7,40 +7,6 @@ const authentication = require("../middleware/authentication");
 const authController = require("../controllers/auth/authController");
 
 const authRouter = express.Router();
-//get user
-authRouter.get("/:id", async (req, res, next) => {
-  try {
-    const result = await User.find();
-
-    if (result.length === 0) {
-      throw { status: 404, message: "No user found" };
-    }
-    res.status(200).json({
-      status: "success",
-      code: 200,
-      data: result,
-    });
-  } catch (err) {
-    next(err);
-  }
-});
-//get all users
-authRouter.get("/", authentication, async (req, res, next) => {
-  try {
-    const result = await User.find();
-
-    if (result.length === 0) {
-      throw { status: 404, message: "No user found" };
-    }
-    res.status(200).json({
-      status: "success",
-      code: 200,
-      data: result,
-    });
-  } catch (err) {
-    next(err);
-  }
-});
 
 // register, post user //signUp
 authRouter.post("/register", authController.signUp);

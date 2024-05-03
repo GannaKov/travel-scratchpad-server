@@ -43,11 +43,11 @@ const signUp = async (req, res, next) => {
 // login
 
 const login = async (req, res, next) => {
-  console.log("req.body", req.body);
+  //   console.log("req.body", req.body);
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
-    console.log("user", user);
+    // console.log("user", user);
     if (!user) {
       throw { status: 400, message: "Email is incorrect" };
       //   return res.status(400).json({
