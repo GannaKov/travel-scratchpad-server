@@ -43,6 +43,8 @@ const getCloudinaryUrl = async (img) => {
 // post trip
 const addTrip = async (req, res) => {
   try {
+    const { id: owner } = req.user;
+
     //const cldRes = await getCloudinaryUrl(req);
     //const fileUrl = cldRes.url;
     // -----multy promise --------
@@ -69,6 +71,7 @@ const addTrip = async (req, res) => {
       // main_img: fileUrl,
       main_img: mainImg,
       images: uploadedImages,
+      owner: owner,
     });
     // for multy if I need
     // if (!uploadedImages || uploadedImages.length === 0) {

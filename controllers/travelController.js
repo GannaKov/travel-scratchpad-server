@@ -47,6 +47,8 @@ const getTripById = async (req, res, next) => {
 
 //delete one trip
 const deleteTripById = async (req, res, next) => {
+  const { id: owner } = req.user;
+
   try {
     const { id } = req.params;
 
@@ -73,17 +75,22 @@ const deleteTripById = async (req, res, next) => {
       });
     }
     //-------- end delete from  Cloudinary
-    const result = await Trip.findByIdAndDelete(id);
-    //console.log("del", result);
+
+    const result = await Trip.findOneAndDelete({
+      _id: req.params.id,
+      owner: owner,
+    });
+
     if (!result) {
-      throw res.status(500).send("Error deleting result");
+      return res.status(500).send("Error deleting result");
     }
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       code: 200,
       data: result,
     });
   } catch (err) {
+    console.log("in catch");
     next(err);
   }
 };

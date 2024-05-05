@@ -1,4 +1,5 @@
 const express = require("express");
+const authentication = require("../middleware/authentication");
 
 const { addTrip, updateTrip, updateTrip2 } = require("../controllers/addTrip");
 const {
@@ -8,7 +9,7 @@ const {
 const addTripRouter = express.Router();
 
 //addTripRouter.post("/", multerUploads, addTrip);
-addTripRouter.post("/", multerMultyUploads, addTrip);
+addTripRouter.post("/", authentication, multerMultyUploads, addTrip);
 //addTripRouter.put("/:id", multerUploads, updateTrip);
 addTripRouter.put("/:id", multerMultyUploads, updateTrip);
 

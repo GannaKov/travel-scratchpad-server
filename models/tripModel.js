@@ -92,6 +92,11 @@ const tripSchema = new Schema(
     images: [{ type: String }],
     main_img: { type: String },
     total_amount: { type: String },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   { collection: "travels" }
 );
