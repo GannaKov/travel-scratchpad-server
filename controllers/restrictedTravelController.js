@@ -6,19 +6,23 @@ const dayjs = require("dayjs");
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 
+// Get All Own  Trips
 const getAllOwnTrips = async (req, res, next) => {
   const { id: owner } = req.user;
 
+  // string to objectId
   const ownerId = mongoose.Types.ObjectId.createFromHexString(owner);
-  console.log("owner", ownerId);
+
+  //-----
   try {
-    // const isSort = req.query.sort;
-
-    // const result = isSort
-    //   ? await Country.find().sort({ visited: -1, name: 1 })
-    //   : await Country.find().sort({ visited: -1 });
-
-    const result = await Trip.find({ owner: ownerId });
+    //combine query
+    let query = { owner: ownerId };
+    if (req.query.country) {
+      query.countries = req.query.country;
+    }
+    console.log("query", query);
+    //------
+    const result = await Trip.find(query);
 
     if (result.length === 0) {
       throw { status: 404, message: "No trip found" };
