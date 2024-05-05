@@ -46,59 +46,59 @@ const getTripById = async (req, res, next) => {
 };
 
 //delete one trip
-const deleteTripById = async (req, res, next) => {
-  const { id: owner } = req.user;
+// const deleteTripById = async (req, res, next) => {
+//   const { id: owner } = req.user;
 
-  try {
-    const { id } = req.params;
+//   try {
+//     const { id } = req.params;
 
-    const trip = await Trip.findById(id);
+//     const trip = await Trip.findById(id);
 
-    if (!trip) {
-      throw { status: 404, message: "Trip not found" };
-    }
-    console.log("owner", owner, "trip.owner", trip.owner.toString());
-    if (owner !== trip.owner.toString()) {
-      console.log("!owner");
-      return res.status(403).json({ message: "Access denied" });
-    }
-    // delete from  Cloudinary
-    if (trip.main_img) {
-      const publicId = trip.main_img.split("/").pop().split(".")[0];
+//     if (!trip) {
+//       throw { status: 404, message: "Trip not found" };
+//     }
+//     console.log("owner", owner, "trip.owner", trip.owner.toString());
+//     if (owner !== trip.owner.toString()) {
+//       console.log("!owner");
+//       return res.status(403).json({ message: "Access denied" });
+//     }
+//     // delete from  Cloudinary
+//     if (trip.main_img) {
+//       const publicId = trip.main_img.split("/").pop().split(".")[0];
 
-      await uploader
-        .destroy(`travel-scratchpad/${publicId}`)
-        .then((res) => console.log("photo", res));
-    }
+//       await uploader
+//         .destroy(`travel-scratchpad/${publicId}`)
+//         .then((res) => console.log("photo", res));
+//     }
 
-    if (trip.images.length > 0) {
-      trip.images.forEach(async (img) => {
-        const publicId = img.split("/").pop().split(".")[0];
+//     if (trip.images.length > 0) {
+//       trip.images.forEach(async (img) => {
+//         const publicId = img.split("/").pop().split(".")[0];
 
-        await uploader.destroy(`travel-scratchpad/${publicId}`);
-        // .then((res) => console.log("photo", res));
-      });
-    }
-    //-------- end delete from  Cloudinary
+//         await uploader.destroy(`travel-scratchpad/${publicId}`);
+//         // .then((res) => console.log("photo", res));
+//       });
+//     }
+//     //-------- end delete from  Cloudinary
 
-    const result = await Trip.findOneAndDelete({
-      _id: req.params.id,
-      owner: owner,
-    });
+//     const result = await Trip.findOneAndDelete({
+//       _id: req.params.id,
+//       owner: owner,
+//     });
 
-    if (!result) {
-      return res.status(500).send("Error deleting result");
-    }
-    return res.status(200).json({
-      status: "success",
-      code: 200,
-      data: result,
-    });
-  } catch (err) {
-    console.log("in catch");
-    next(err);
-  }
-};
+//     if (!result) {
+//       return res.status(500).send("Error deleting result");
+//     }
+//     return res.status(200).json({
+//       status: "success",
+//       code: 200,
+//       data: result,
+//     });
+//   } catch (err) {
+//     console.log("in catch");
+//     next(err);
+//   }
+// };
 
 //   put change trip/:code
 // const updateCountry = async (req, res, next) => {
@@ -259,7 +259,7 @@ module.exports = {
   getAllTrips,
   // postCountry,
   getTripById,
-  deleteTripById,
+  // deleteTripById,
   // updateCountry,
   // //deleteCountry,
   // toggleVisitedStatus,

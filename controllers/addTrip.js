@@ -4,7 +4,7 @@ const { nanoid } = require("nanoid");
 const dayjs = require("dayjs");
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
-
+//THEN DELETE THIS FILE !!!!!
 const handleUpload = async (file) => {
   const res = await uploader.upload(file, {
     resource_type: "image",
