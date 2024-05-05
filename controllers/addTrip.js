@@ -98,16 +98,29 @@ const addTrip = async (req, res) => {
 
 //   put change trip/:шв
 const updateTrip = async (req, res, next) => {
+  const { id: owner } = req.user;
+  const { id } = req.params;
+  console.log("id", id);
+  // if (owner !== id) {
+  //   console.log("owner", owner, "id", id);
+  //   return res.status(403).json({ message: "Access denied" });
+  // }
+
   // console.log("req.files in put", req.files);
   const { isMainImgChanged, image_files, old_images } = req.body;
-  console.log("old_images", old_images, typeof old_images);
-  console.log("isMainImgChanged", isMainImgChanged, typeof isMainImgChanged);
-  try {
-    const { id } = req.params;
+  // console.log("old_images", old_images, typeof old_images);
+  // console.log("isMainImgChanged", isMainImgChanged, typeof isMainImgChanged);
 
+  try {
     const trip = await Trip.findById(id);
+
     if (!trip) {
       throw { status: 404, message: "Trip not found" };
+    }
+    console.log("owner", owner, "trip.owner", trip.owner.toString());
+    if (owner !== trip.owner.toString()) {
+      console.log("!owner");
+      return res.status(403).json({ message: "Access denied" });
     }
     // old one
     // const cldRes = await getCloudinaryUrl(req);
@@ -218,12 +231,13 @@ const updateTrip = async (req, res, next) => {
     //   delete tripData.images;
     // }
     //´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´
-
+    console.log("before updatedTrip");
     const updatedTrip = await Trip.findByIdAndUpdate(id, tripData, {
       new: true,
     });
 
     if (!updatedTrip) {
+      console.log("!updatedTrip");
       throw res.status(500).send("Error updating country");
     }
     res.status(200).json({

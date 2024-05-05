@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken");
 const authentication = (req, res, next) => {
   const authHeader = req.headers["authorization"]; // only Bearer TOKEN
   const token = authHeader && authHeader.split(" ")[1]; // only Bearer TOKEN
-  console.log("1", token);
 
   if (token === null) return res.status(401).json({ error: "Null token" });
 

@@ -11,6 +11,6 @@ const addTripRouter = express.Router();
 //addTripRouter.post("/", multerUploads, addTrip);
 addTripRouter.post("/", authentication, multerMultyUploads, addTrip);
 //addTripRouter.put("/:id", multerUploads, updateTrip);
-addTripRouter.put("/:id", multerMultyUploads, updateTrip);
+addTripRouter.put("/:id", authentication, multerMultyUploads, updateTrip);
 
 module.exports = addTripRouter;

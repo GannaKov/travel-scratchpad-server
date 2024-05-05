@@ -57,6 +57,11 @@ const deleteTripById = async (req, res, next) => {
     if (!trip) {
       throw { status: 404, message: "Trip not found" };
     }
+    console.log("owner", owner, "trip.owner", trip.owner.toString());
+    if (owner !== trip.owner.toString()) {
+      console.log("!owner");
+      return res.status(403).json({ message: "Access denied" });
+    }
     // delete from  Cloudinary
     if (trip.main_img) {
       const publicId = trip.main_img.split("/").pop().split(".")[0];
