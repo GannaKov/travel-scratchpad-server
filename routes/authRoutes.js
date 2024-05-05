@@ -14,14 +14,11 @@ authRouter.post("/register", authController.signUp);
 // login
 authRouter.post("/login", authController.login);
 
-///////router.post("/login", authController.login, authMiddleware.generateAuthTokens);
-
 //-------------------------------------
 authRouter.get("/refresh_token", authController.refreshToken);
-//////router.post("/refresh", authController.refreshAccessToken);
 
-//------------------
-authRouter.get("/refresh_token", authController.refreshToken);
+//--- log out
+
 authRouter.delete("/refresh_token", authController.deleteToken);
 
 module.exports = authRouter;
