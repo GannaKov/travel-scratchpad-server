@@ -8,7 +8,7 @@ const getAllTrips = async (req, res, next) => {
     if (req.query.country) {
       query.countries = req.query.country;
     }
-    console.log("query", query);
+
     const result = await Trip.find(query);
 
     if (result.length === 0) {

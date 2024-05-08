@@ -50,20 +50,21 @@ const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
-    // console.log("user", user);
+    console.log("user1", user);
     if (!user) {
-      throw { status: 400, message: "Email is incorrect" };
-      //   return res.status(400).json({
-      //     status: "error",
-      //     code: 400,
-      //     message: "Incorrect login ",
-      //     data: "Bad request",
-      //   });
+      return res.status(401).json({ error: "Email is incorrect" });
+      //throw { status: 400, message: "Email is incorrect" };
+      // return res.status(400).json({
+      //   status: "error",
+      //   code: 400,
+      //   message: "Incorrect Email",
+      //   data: "Bad request",
+      // });
     }
 
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
-      throw { status: 400, message: "Incorrect password" };
+      return res.status(401).json({ error: "Password is incorrect" });
       //   return res.status(400).json({
       //     status: "error",
       //     code: 400,
@@ -73,10 +74,6 @@ const login = async (req, res, next) => {
     }
     //----
     const expiresAt = ms(process.env.ACCESS_TOKEN_LIFE);
-    // const payload = {
-    //   ...user,
-    //   expiresAt,
-    // };
 
     //---
     let tokens = jwtTokens(user, expiresAt);
@@ -105,10 +102,11 @@ const login = async (req, res, next) => {
 const refreshToken = (req, res) => {
   try {
     const refreshToken = req.cookies.refresh_token;
+    console.log("refreshToken", refreshToken);
     if (!refreshToken) {
       return res.status(204);
     }
-    console.log(refreshToken);
+    // console.log(refreshToken);
     if (refreshToken === null) {
       return res.status(401).json({ error: "Null refresh token" });
     }
@@ -124,7 +122,7 @@ const refreshToken = (req, res) => {
         //   httpOnly: true,
         // });
         //we need only ACCESS_TOKEN!!!
-        console.log("tockens", tokens);
+        //console.log("tockens", tokens);
         res.json(tokens);
       }
     );

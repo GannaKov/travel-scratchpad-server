@@ -26,6 +26,11 @@ const getAllOwnTrips = async (req, res, next) => {
 
     if (result.length === 0) {
       throw { status: 404, message: "No trip found" };
+      // return res.status(404).json({
+      //   status: "No trip found",
+      //   code: 404,
+      //   data: [],
+      // });
     }
     res.status(200).json({
       status: "success",
