@@ -81,7 +81,7 @@ const login = async (req, res, next) => {
       httpOnly: true,
       //maxAge: ms(process.env.ACCESS_TOKEN_LIFE),
     });
-
+    console.log("ref tok", tokens.refreshToken);
     res.json({
       status: "success",
       code: 200,
@@ -101,7 +101,12 @@ const login = async (req, res, next) => {
 //refresh
 const refreshToken = (req, res) => {
   try {
-    const refreshToken = req.cookies.refresh_token;
+    // if localStorage add back !!!!
+    // const refreshToken = req.cookies.refresh_token;
+    //-----
+    // if localStorage
+    const refreshToken = req.headers.authorization.split(" ")[1];
+    //------
     console.log("refreshToken", refreshToken);
     if (!refreshToken) {
       return res.status(204);
