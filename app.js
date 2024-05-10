@@ -35,7 +35,8 @@ app.use("/api/accommodation", accommodationRouter);
 
 app.use((err, req, res, next) => {
   if (err.status === 404) {
-    res.status(404).send(err.message);
+    console.log("err1", err);
+    res.status(404).json({ error: err.message });
   } else {
     next(err);
   }
@@ -43,8 +44,8 @@ app.use((err, req, res, next) => {
 
 app.use((err, req, res, next) => {
   const { status = 500, message = "Server error " } = err;
-
-  res.status(status).json({ message });
+  console.log("err2", err);
+  res.status(status).json({ error: message });
 });
 
 module.exports = app;

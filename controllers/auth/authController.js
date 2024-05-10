@@ -81,13 +81,13 @@ const login = async (req, res, next) => {
       httpOnly: true,
       //maxAge: ms(process.env.ACCESS_TOKEN_LIFE),
     });
-    console.log("ref tok", tokens.refreshToken);
+
     res.json({
       status: "success",
       code: 200,
       data: {
         tokens,
-        user: { email: user.email, id: user._id },
+        // user: { email: user.email, id: user._id },
         expiresAt,
       },
     });
@@ -109,10 +109,12 @@ const refreshToken = (req, res) => {
     //------
     console.log("refreshToken", refreshToken);
     if (!refreshToken) {
+      console.log("refreshToken in !refr", refreshToken);
       return res.status(204);
     }
     // console.log(refreshToken);
     if (refreshToken === null) {
+      console.log("refreshToken in null", refreshToken);
       return res.status(401).json({ error: "Null refresh token" });
     }
 

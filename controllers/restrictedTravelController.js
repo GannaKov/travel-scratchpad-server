@@ -25,7 +25,7 @@ const getAllOwnTrips = async (req, res, next) => {
     const result = await Trip.find(query);
 
     if (result.length === 0) {
-      throw { status: 404, message: "No trip found" };
+      throw { status: 404, error: "No trip found" };
       // return res.status(404).json({
       //   status: "No trip found",
       //   code: 404,
@@ -53,10 +53,10 @@ const deleteTripById = async (req, res, next) => {
     if (!trip) {
       throw { status: 404, message: "Trip not found" };
     }
-    console.log("owner", owner, "trip.owner", trip.owner.toString());
+
     if (owner !== trip.owner.toString()) {
       console.log("!owner");
-      return res.status(403).json({ message: "Access denied" });
+      return res.status(403).json({ error: "Access denied" });
     }
     // delete from  Cloudinary
     if (trip.main_img) {
@@ -83,7 +83,8 @@ const deleteTripById = async (req, res, next) => {
     });
 
     if (!result) {
-      return res.status(500).send("Error deleting result");
+      // return res.status(500).json({ error: "Error deleting result" });
+      throw { status: 500, message: "Error deleting result" };
     }
     return res.status(200).json({
       status: "success",
@@ -102,8 +103,10 @@ const handleUpload = async (file) => {
     folder: "travel-scratchpad",
     public_id: Date.now() + nanoid(6),
     transformation: {
+      // width: 1000,
+      // height: 1000,
       width: 1000,
-      height: 1000,
+      height: 800,
       gravity: "auto",
       crop: "fill",
     },
@@ -169,16 +172,16 @@ const addTrip = async (req, res) => {
     const result = await newTrip.save();
     //res.json(cldRes);
     if (!result) {
-      throw { status: 500, message: "Failed to create image" };
+      throw { status: 500, message: "Failed to create trip" };
     }
     res.status(201).json({ status: "Created ", code: 201, data: result });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "Error uploading image to Cloudinary" });
+    next(error);
   }
 };
 
-//   put change trip/:шв
+//   put change trip/:id
 const updateTrip = async (req, res, next) => {
   const { id: owner } = req.user;
   const { id } = req.params;
@@ -199,10 +202,10 @@ const updateTrip = async (req, res, next) => {
     if (!trip) {
       throw { status: 404, message: "Trip not found" };
     }
-    console.log("owner", owner, "trip.owner", trip.owner.toString());
+
     if (owner !== trip.owner.toString()) {
       console.log("!owner");
-      return res.status(403).json({ message: "Access denied" });
+      return res.status(403).json({ error: "Access denied" });
     }
     // old one
     // const cldRes = await getCloudinaryUrl(req);
@@ -286,10 +289,7 @@ const updateTrip = async (req, res, next) => {
       allImages = [...oldImgArr, ...uploadedImages];
     }
     let mainImg = allImages.length > 0 ? allImages[0] : "";
-    console.log("uploadedImages ", uploadedImages);
-    console.log("allImages", allImages);
-    console.log("oldImgArr", oldImgArr);
-    console.log("mainImg", mainImg);
+
     //--------------
     const tripData = {
       ...data,
@@ -320,7 +320,7 @@ const updateTrip = async (req, res, next) => {
 
     if (!updatedTrip) {
       console.log("!updatedTrip");
-      throw res.status(500).send("Error updating country");
+      throw { status: 500, message: "Failed to update trip" };
     }
     res.status(200).json({
       status: "updated ",
