@@ -5,12 +5,12 @@ const authentication = require("../middleware/authentication");
 
 const usersController = require("../controllers/usersController");
 
-// userRouter.get("/list", isAuthenticated, usersController.getUsersList);
+// userRouter.get("/", isAuthenticated, usersController.getUsersList);
 //get user
 userRouter.get("/:id", usersController.getUserById);
 
 //get all users
-userRouter.get("/", authentication, usersController.getAllUsers);
+userRouter.get("/", usersController.getAllUsers);
 
 // userRouter.get("/me", isAuthenticated, usersController.getAuthenticatedUser);
 
