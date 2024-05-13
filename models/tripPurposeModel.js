@@ -5,7 +5,7 @@ const tripPurposeSchema = new Schema(
   {
     purpose: { type: String, required: true },
   },
-  { versionKey: false, timestamps: true },
+
   { collection: "tripPurpose" }
 );
 
