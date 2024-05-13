@@ -26,11 +26,6 @@ const getAllOwnTrips = async (req, res, next) => {
 
     if (result.length === 0) {
       throw { status: 404, error: "No trip found" };
-      // return res.status(404).json({
-      //   status: "No trip found",
-      //   code: 404,
-      //   data: [],
-      // });
     }
     res.status(200).json({
       status: "success",
@@ -55,7 +50,7 @@ const deleteTripById = async (req, res, next) => {
     }
 
     if (owner !== trip.owner.toString()) {
-      console.log("!owner");
+     
       return res.status(403).json({ error: "Access denied" });
     }
     // delete from  Cloudinary
@@ -64,7 +59,7 @@ const deleteTripById = async (req, res, next) => {
 
       await uploader
         .destroy(`travel-scratchpad/${publicId}`)
-        .then((res) => console.log("photo", res));
+        // .then((res) => console.log("photo", res));
     }
 
     if (trip.images.length > 0) {
@@ -72,7 +67,6 @@ const deleteTripById = async (req, res, next) => {
         const publicId = img.split("/").pop().split(".")[0];
 
         await uploader.destroy(`travel-scratchpad/${publicId}`);
-        // .then((res) => console.log("photo", res));
       });
     }
     //-------- end delete from  Cloudinary
@@ -83,7 +77,6 @@ const deleteTripById = async (req, res, next) => {
     });
 
     if (!result) {
-      // return res.status(500).json({ error: "Error deleting result" });
       throw { status: 500, message: "Error deleting result" };
     }
     return res.status(200).json({
@@ -92,7 +85,6 @@ const deleteTripById = async (req, res, next) => {
       data: result,
     });
   } catch (err) {
-    console.log("in catch");
     next(err);
   }
 };
@@ -103,8 +95,6 @@ const handleUpload = async (file) => {
     folder: "travel-scratchpad",
     public_id: Date.now() + nanoid(6),
     transformation: {
-      // width: 1000,
-      // height: 1000,
       width: 1000,
       height: 800,
       gravity: "auto",
@@ -129,7 +119,7 @@ const getCloudinaryUrl = async (img) => {
 const addTrip = async (req, res) => {
   try {
     const { id: owner } = req.user;
-
+    // ---- for one image
     //const cldRes = await getCloudinaryUrl(req);
     //const fileUrl = cldRes.url;
     // -----multy promise --------
@@ -185,16 +175,8 @@ const addTrip = async (req, res) => {
 const updateTrip = async (req, res, next) => {
   const { id: owner } = req.user;
   const { id } = req.params;
-  console.log("id", id);
-  // if (owner !== id) {
-  //   console.log("owner", owner, "id", id);
-  //   return res.status(403).json({ message: "Access denied" });
-  // }
 
-  // console.log("req.files in put", req.files);
   const { isMainImgChanged, image_files, old_images } = req.body;
-  // console.log("old_images", old_images, typeof old_images);
-  // console.log("isMainImgChanged", isMainImgChanged, typeof isMainImgChanged);
 
   try {
     const trip = await Trip.findById(id);
@@ -204,7 +186,6 @@ const updateTrip = async (req, res, next) => {
     }
 
     if (owner !== trip.owner.toString()) {
-      console.log("!owner");
       return res.status(403).json({ error: "Access denied" });
     }
     // old one
@@ -223,22 +204,12 @@ const updateTrip = async (req, res, next) => {
     // }
     // ---- end old one
 
-    // delete from Cloudinary prev images
-    // console.log("trip.images", trip.images);
-    // if (trip.images.length > 0) {
-    //   trip.images.forEach(async (img) => {
-    //     const publicId = img.split("/").pop().split(".")[0];
-    //     console.log("in delete", publicId);
-    //     await uploader.destroy(`travel-scratchpad/${publicId}`);
-    //   });
-    // }
     let oldImgArr = [];
     if (old_images) {
       oldImgArr = Array.isArray(old_images) ? old_images : [old_images];
     } else {
       oldImgArr = [];
     }
-    //const oldImgArr = Array.isArray(old_images) ? old_images : [old_images];
 
     if (trip.images.length > 0) {
       trip.images.forEach(async (img) => {
@@ -273,14 +244,6 @@ const updateTrip = async (req, res, next) => {
     const startDate = dayjs(data.date_start, "DD.MM.YYYY").toDate();
     const endDate = dayjs(data.date_end, "DD.MM.YYYY").toDate();
 
-    //const mainImg = uploadedImages.length > 0 ? uploadedImages[0] : "";
-    // const mainImg =
-    //   isMainImgChanged === "true"
-    //     ? uploadedImages[0]
-    //     : old_images
-    //     ? old_images[0]
-    //     : "";
-
     let allImages = [];
 
     if (isMainImgChanged === "true") {
@@ -307,19 +270,14 @@ const updateTrip = async (req, res, next) => {
     // } else {
     //   delete tripData.main_img;
     // }
-    //for many ????
-    // if (!uploadedImages || uploadedImages.length === 0) {
-    //   // Если массив пустой или его длина равна 0, удаляем поле images из объекта newTripData
-    //   delete tripData.images;
-    // }
+
     //´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´´
-    console.log("before updatedTrip");
+
     const updatedTrip = await Trip.findByIdAndUpdate(id, tripData, {
       new: true,
     });
 
     if (!updatedTrip) {
-      console.log("!updatedTrip");
       throw { status: 500, message: "Failed to update trip" };
     }
     res.status(200).json({

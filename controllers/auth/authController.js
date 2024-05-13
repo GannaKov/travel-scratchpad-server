@@ -1,24 +1,16 @@
-const createError = require("http-errors");
 const User = require("../../models/userModel");
 const { jwtTokens } = require("../../utils/jwtHelpers");
 const bcrypt = require("bcrypt");
 const ms = require("ms");
-const userRouter = require("../../routes/userRouter");
+
 const jwt = require("jsonwebtoken");
 
 //signUp
 const signUp = async (req, res, next) => {
   try {
-    //console.log("req.body", req.body);
     const { username, email, password } = req.body;
     if (!username || !email || !password) {
       throw { status: 422, message: "Please fill all the required fields" };
-      //   return res.status(422).json({
-      //     status: "Unprocessable Content",
-      //     code: 422,
-      //     message: "Please fill all the required fields",
-      //     //data:""
-      //   });
     }
     const user = await User.findOne({ email });
     if (user) {
@@ -26,7 +18,6 @@ const signUp = async (req, res, next) => {
         status: "Unprocessable Content",
         code: 422,
         message: "Email already exists",
-        //data: "Conflict",
       });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -46,31 +37,17 @@ const signUp = async (req, res, next) => {
 // login
 
 const login = async (req, res, next) => {
-  //   console.log("req.body", req.body);
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
-    console.log("user1", user);
+
     if (!user) {
       return res.status(401).json({ error: "Email is incorrect" });
-      //throw { status: 400, message: "Email is incorrect" };
-      // return res.status(400).json({
-      //   status: "error",
-      //   code: 400,
-      //   message: "Incorrect Email",
-      //   data: "Bad request",
-      // });
     }
 
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
       return res.status(401).json({ error: "Password is incorrect" });
-      //   return res.status(400).json({
-      //     status: "error",
-      //     code: 400,
-      //     message: "Incorrect password",
-      //     data: "Bad request",
-      //   });
     }
     //----
     const expiresAt = ms(process.env.ACCESS_TOKEN_LIFE);
@@ -87,12 +64,10 @@ const login = async (req, res, next) => {
       code: 200,
       data: {
         tokens,
-        // user: { email: user.email, id: user._id },
+
         expiresAt,
       },
     });
-    // req.userId = user.id;
-    // return next();
   } catch (error) {
     next(error);
   }
@@ -107,14 +82,12 @@ const refreshToken = (req, res) => {
     // if localStorage
     const refreshToken = req.headers.authorization.split(" ")[1];
     //------
-    console.log("refreshToken", refreshToken);
+
     if (!refreshToken) {
-      console.log("refreshToken in !refr", refreshToken);
       return res.status(204);
     }
-    // console.log(refreshToken);
+
     if (refreshToken === null) {
-      console.log("refreshToken in null", refreshToken);
       return res.status(401).json({ error: "Null refresh token" });
     }
 
@@ -129,7 +102,7 @@ const refreshToken = (req, res) => {
         //   httpOnly: true,
         // });
         //we need only ACCESS_TOKEN!!!
-        //console.log("tockens", tokens);
+
         res.json(tokens);
       }
     );

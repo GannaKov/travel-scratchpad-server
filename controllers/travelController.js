@@ -4,14 +4,11 @@ const { cloudinaryConfig, uploader } = require("../utils/cloudinaryConfig");
 // GET all trips
 const getAllTrips = async (req, res, next) => {
   try {
-    console.log("req.query", req.query);
     let query = {};
     if (req.query.country) {
       query.countries = req.query.country;
-      console.log("req.query.countries", req.query.country);
     }
     if (req.query.purpose) {
-      console.log("req.query.purpose", req.query.purpose);
       query.purpose = req.query.purpose;
     }
 

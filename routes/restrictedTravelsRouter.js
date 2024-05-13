@@ -2,12 +2,10 @@ const express = require("express");
 const authentication = require("../middleware/authentication");
 const restrictedController = require("../controllers/restrictedTravelController");
 const {
-  multerUploads,
+  // multerUploads,
   multerMultyUploads,
 } = require("../middleware/uploadMiddleware/uploadImages");
 
-// const { query } = require("express-validator");
-// const { body } = require("express-validator");
 const restrictedTravelsRouter = express.Router();
 
 restrictedTravelsRouter.get(
