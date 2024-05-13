@@ -4,7 +4,7 @@ const { Schema, model } = mongoose;
 const tripSchema = new Schema(
   {
     title: { type: String, required: true },
-    travel_rating: { type: Number, required: true },
+    travel_rating: { type: Number }, //, required: true
     countries: [{ type: String, required: true }],
     destination: [{ type: String }],
     date_start: { type: Date, required: true },
