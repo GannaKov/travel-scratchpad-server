@@ -22,7 +22,7 @@ const app = express();
 const corsOptions = {
   credentials: true,
   origin: process.env.URL,
-  // origin: "http://localhost:5173",
+  //origin: "http://localhost:5173",
 };
 app.use(cors(corsOptions));
 
@@ -40,6 +40,8 @@ app.use(cors(corsOptions));
 // app.use(express.urlencoded({ limit: "50mb" }));
 // app.use(bodyParser.json({ limit: "50mb" }));
 // app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+
+//"http://localhost:5173"
 app.use((req, res, next) => {
   res.header(
     "Access-Control-Allow-Origin",

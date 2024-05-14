@@ -12,7 +12,9 @@ const signUp = async (req, res, next) => {
     if (!username || !email || !password) {
       throw { status: 422, message: "Please fill all the required fields" };
     }
-    const user = await User.findOne({ email });
+    const inputEmail = email.toLowerCase();
+    //const user = await User.findOne({ email });
+    const user = await User.findOne({ email: inputEmail });
     if (user) {
       return res.status(422).json({
         status: "Unprocessable Content",
@@ -23,7 +25,9 @@ const signUp = async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await User.create({
-      ...req.body,
+      // ...req.body,
+      username,
+      email: inputEmail,
       password: hashedPassword,
     });
     res.status(201).json({ status: "created ", code: 201, data: newUser });
@@ -39,13 +43,16 @@ const signUp = async (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const inputEmail = email.toLowerCase();
+    // const user = await User.findOne({ email });
+    const user = await User.findOne({ email: inputEmail });
 
     if (!user) {
       return res.status(401).json({ error: "Email is incorrect" });
     }
 
     const validPassword = await bcrypt.compare(password, user.password);
+
     if (!validPassword) {
       return res.status(401).json({ error: "Password is incorrect" });
     }

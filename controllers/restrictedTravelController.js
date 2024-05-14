@@ -50,16 +50,14 @@ const deleteTripById = async (req, res, next) => {
     }
 
     if (owner !== trip.owner.toString()) {
-     
       return res.status(403).json({ error: "Access denied" });
     }
     // delete from  Cloudinary
     if (trip.main_img) {
       const publicId = trip.main_img.split("/").pop().split(".")[0];
 
-      await uploader
-        .destroy(`travel-scratchpad/${publicId}`)
-        // .then((res) => console.log("photo", res));
+      await uploader.destroy(`travel-scratchpad/${publicId}`);
+      // .then((res) => console.log("photo", res));
     }
 
     if (trip.images.length > 0) {
@@ -219,11 +217,11 @@ const updateTrip = async (req, res, next) => {
             const oldPublicId = oldImg.split("/").pop().split(".")[0];
             return oldPublicId === publicId;
           });
-
+// delete images that user deleted (they are not in oldArr)
           if (!isInOldImages) {
             await uploader.destroy(`travel-scratchpad/${publicId}`);
           }
-        } else {
+        } else {//delete all prev images
           await uploader.destroy(`travel-scratchpad/${publicId}`);
         }
       });
