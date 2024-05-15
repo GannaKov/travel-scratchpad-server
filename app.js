@@ -6,23 +6,17 @@ const userRouter = require("./routes/userRouter.js");
 const travelsRouter = require("./routes/travelsRouter.js");
 const tripPurposeRouter = require("./routes/tripPurposeRouter.js");
 const restrictedTravelsRouter = require("./routes/restrictedTravelsRouter.js");
+const userLocationsRouter = require("./routes/userLocarionsRouter.js");
 const bodyParser = require("body-parser");
 const accommodationRouter = require("./routes/accommodationRouer.js");
 require("dotenv").config();
 const cors = require("cors");
 const app = express();
 
-// app.use((req, res, next) => {
-//   res.header("Access-Control-Allow-Origin", "http://localhost:5173");
-//   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-//   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-//   res.header("Access-Control-Allow-Credentials", true);
-//   next();
-// });
 const corsOptions = {
   credentials: true,
   origin: process.env.URL,
-  //origin: "http://localhost:5173",
+  // origin: "http://localhost:5173",
 };
 app.use(cors(corsOptions));
 
@@ -34,12 +28,6 @@ app.use(cors(corsOptions));
 //     optionsSuccessStatus: 200,
 //   })
 // );
-
-//app.use(express.urlencoded({ extended: false }));
-// app.use(express.json({ limit: "50mb" }));
-// app.use(express.urlencoded({ limit: "50mb" }));
-// app.use(bodyParser.json({ limit: "50mb" }));
-// app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 //"http://localhost:5173"
 app.use((req, res, next) => {
@@ -64,6 +52,7 @@ app.use("/api/trips", travelsRouter);
 app.use("/api/own_trips", restrictedTravelsRouter);
 app.use("/api/trip-purpose", tripPurposeRouter);
 app.use("/api/accommodation", accommodationRouter);
+app.use("/api/user-locations", userLocationsRouter);
 
 app.use((err, req, res, next) => {
   if (err.status === 404) {

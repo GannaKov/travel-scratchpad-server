@@ -1,5 +1,5 @@
 const Trip = require("../models/tripModel");
-const { cloudinaryConfig, uploader } = require("../utils/cloudinaryConfig");
+// const { cloudinaryConfig, uploader } = require("../utils/cloudinaryConfig");
 
 // GET all trips
 const getAllTrips = async (req, res, next) => {
