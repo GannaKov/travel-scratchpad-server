@@ -16,7 +16,7 @@ const tripSchema = new Schema(
       {
         type: { type: String },
         link: { type: String },
-        price: { type: Number },
+        price: { type: String },
         rating: { type: Number },
         review: { type: String },
       },
@@ -26,7 +26,7 @@ const tripSchema = new Schema(
     expenses: [
       {
         item: { type: String },
-        amount: { type: Number },
+        amount: { type: String },
       },
     ],
     useful_links: [
