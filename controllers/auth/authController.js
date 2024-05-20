@@ -29,6 +29,7 @@ const signUp = async (req, res, next) => {
       username,
       email: inputEmail,
       password: hashedPassword,
+      avatar: "",
     });
     res.status(201).json({ status: "created ", code: 201, data: newUser });
 
@@ -127,6 +128,7 @@ const deleteToken = (req, res) => {
     res.status(401).json({ error: error.message });
   }
 };
+
 module.exports = {
   signUp,
   login,

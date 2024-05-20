@@ -25,7 +25,7 @@ const userSchema = new Schema(
       minLength: [6, "Password must be at least 6 digits"],
       required: [true, "Password is required"],
     },
-   
+    avatar: { type: String },
   },
 
   { versionKey: false, timestamps: true },
@@ -33,7 +33,6 @@ const userSchema = new Schema(
 );
 
 const User = model("User", userSchema);
-
 
 // ------------------------------
 module.exports = User;
