@@ -1,8 +1,13 @@
 This project is based on the template [template-node-js](https://github.com/GannaKov/template-node-js), which is itself based on the Vite React template.
 
-## Additional Information
+## Important Information
 
-All information about this project can be found at the following link: [Travel Scratchpad](https://ganna-kovchyk.gitbook.io/travel-scratchpad)
+All key information about this project can be found at the following link: [Travel Scratchpad](https://baza-everything-can-move.vercel.app/).
+
+To access the full functionality of the project, please use the following credentials:
+
+- **Login**: `test@test.com`
+- **Password**: `123456`
 
 ## Links
 
